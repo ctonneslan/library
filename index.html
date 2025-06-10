@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>My Library</h1>
+        </div>
+        <div class="sidebar">
+            <form id="form" action="">
+                <h3>Add a book</h3>
+                <div class="label-input">
+                    <label for="title">Title <span aria-label="required">*</span></label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                <div class="label-input">
+                    <label for="author">Author <span aria-label="required">*</span></label>
+                    <input type="text" id="author" name="author" required>
+                </div>
+                <div class="label-input">
+                    <label for="cover">Cover</label>
+                    <input type="file" id="cover" name="cover" accept="image/png image/jpeg">
+                </div>
+                <fieldset>
+                    <legend>Have you read this?</legend>
+                    <div>
+                        <label for="yes">Yes</label>
+                        <input type="radio" id="yes" name="haveRead">
+                    </div>
+                </fieldset>
+                <div class="button">
+                    <button id="submit" type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+        <div class="main">
+            <div class="want-to-read">
+                <h1>Wish List</h1>
+                <div id="want-cards">
+                    <div class="card">
+                        <img src="images/The-road.jpg" alt="The Road">
+                        <div class="info">
+                            <p>The Road</p>
+                            <p>By Cormac McCarthy</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <img src="images/anna-karenina-292.jpg" alt="Anna Karenina">
+                        <div class="info">
+                            <p>Anna Karenina</p>
+                            <p>By Leo Tolstoy</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="have-read">
+                <h1>Finished</h1>
+                <div id="read-cards">
+                    <div class="card">
+                        <img src="images/grapes.jpg" alt="The Grapes of Wrath">
+                        <div class="info">
+                            <p>The Grapes of Wrath</p>
+                            <p>By John Steinbeck</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <img src="images/Cat's_Cradle.jpg" alt="Cat's Cradle">
+                        <div class="info">
+                            <p>Cat's Cradle</p>
+                            <p>By Kurt Vonnegut</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <img src="images/IfBealeStreetCouldTalk.jpeg" alt="If Beale Street Could Talk">
+                        <div class="info">
+                            <p>If Beale Street Could Talk</p>
+                            <p>By James Baldwin</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="js-file.js"></script>
+</body>
+</html>
