@@ -135,7 +135,7 @@ button {
     z-index: 10;
 }
 
-img {
+.book-image {
     max-width: 100%;
     height: 200px;
     object-fit: cover;
@@ -154,4 +154,19 @@ img {
 .main {
     padding: 20px;
     height: 100%;
+}
+
+.trash {
+    height: 40px;
+    width: 60px;
+}
+
+button {
+    cursor: pointer;
+}
+
+.options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

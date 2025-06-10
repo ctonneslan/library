@@ -35,8 +35,15 @@ form.addEventListener('submit', (event) => {
     let card = document.createElement('div');
     card.classList.add('card')
     let img = document.createElement('img');
+    img.classList.add('book-image')
     let info = document.createElement('div');
-    info.classList.add('info')
+    info.classList.add('info');
+    let options = document.createElement('div');
+    let toggle = document.createElement('button');
+    toggle.textContent = 'Toggle Read';
+    toggle.classList.add('toggle');
+    options.appendChild(toggle);
+    options.classList.add('options');
 
     // retrieve input information
     const title = document.getElementById('title');
@@ -75,6 +82,50 @@ form.addEventListener('submit', (event) => {
         const wantToRead = document.getElementById('want-cards');
         wantToRead.appendChild(card);
     }
+
+    const trash = document.createElement('img');
+    trash.classList.add('trash');
+    trash.src = 'images/trash.jpg';
+    trash.alt = 'Trash Can';
+    trash.addEventListener('click', function() {
+        const card = this.closest('.card');
+        card.remove();
+    });
+    options.appendChild(trash);
+    card.append(options);
+
+    const wishList = document.getElementById('want-cards');
+    const readList = document.getElementById('read-cards');
+    toggle.addEventListener('click', () => {
+        const card = toggle.closest('.card');
+        if (wishList.contains(card)) {
+            readList.appendChild(card);
+        } else {
+            wishList.appendChild(card);
+        }
+    })
+})
+
+const trash = document.querySelectorAll('.trash');
+trash.forEach(can => {
+    can.addEventListener('click', function() {
+        const card = this.closest('.card');
+        card.remove();
+    })
+})
+
+const toggle = document.querySelectorAll('.toggle');
+const wish = document.getElementById('want-cards');
+const read = document.getElementById('read-cards');
+toggle.forEach(button => {
+    button.addEventListener('click', () => {
+        const card = button.closest('.card');
+        if (wish.contains(card)) {
+            read.appendChild(card);
+        } else {
+            wish.appendChild(card);
+        }
+    })
 })
 
 
