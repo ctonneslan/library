@@ -1,132 +1,119 @@
-const library = [];
-
-function Book(title, author, haveRead) {
-    if (!new.target) {
-        throw Error('Must use new keyword when using constructor.');
+class Library {
+    constructor() {
+        this.library = [];
     }
-    this.id = crypto.randomUUID();
-    this.title = title;
-    this.author = author;
-    this.haveRead = haveRead;
-    this.show = () => {
-        if (this.haveRead) {
-            console.log(`${this.title} by ${this.author}, ${this.pages} pages, has been read.`)
+
+    addBookToLibrary(book) {
+        this.library.push(book);
+    }
+}
+
+class Book {
+    constructor(title, author, cover='', haveRead) {
+        this.title = title;
+        this.author = author;
+        this.cover = cover;
+        this.haveRead = haveRead;
+        this.id = crypto.randomUUID();
+    }
+}
+
+function screenRenderer() {
+    // build up the card and content elements
+    const wishList = document.getElementById('want-cards');
+    const readList = document.getElementById('read-cards');
+    wishList.innerHTML = '';
+    readList.innerHTML = '';
+    
+    library.library.forEach(book => {
+        let card = document.createElement('div');
+        card.classList.add('card')
+        let img = document.createElement('img');
+        img.classList.add('book-image')
+        let info = document.createElement('div');
+        info.classList.add('info');
+        let options = document.createElement('div');
+        let toggle = document.createElement('button');
+        toggle.textContent = 'Toggle Read';
+        toggle.classList.add('toggle');
+        options.appendChild(toggle);
+        options.classList.add('options');
+    
+        let titleChild = document.createElement('p')
+        let authorChild = document.createElement('p')
+        titleChild.textContent = book.title;
+        authorChild.textContent = book.author;
+        info.appendChild(titleChild);
+        info.appendChild(authorChild);
+        
+        img.src = book.cover;
+        img.alt = 'Book cover'; 
+
+        card.appendChild(img);
+        card.appendChild(info);
+
+        if (book.haveRead) {
+            const haveRead = document.getElementById('read-cards');
+            haveRead.appendChild(card);
         } else {
-            console.log(`${this.title} by ${this.author}, ${this.pages} pages, has NOT been read.`)
+            const wantToRead = document.getElementById('want-cards');
+            wantToRead.appendChild(card);
         }
-    }
-}
 
-function addBookToLibrary(title, author, pages, hasRead) {
-    library.push(new Book(title, author, pages, hasRead));
-}
+        const trash = document.createElement('img');
+        trash.classList.add('trash');
+        trash.src = 'images/trash.jpg';
+        trash.alt = 'Trash Can';
+        trash.addEventListener('click', function() {
+            const card = this.closest('.card');
+            card.remove();
+        });
+        options.appendChild(trash);
+        card.append(options);
 
-function displayLibrary() {
-    library.forEach(book => {
-        book.show();
+        toggle.addEventListener('click', () => {
+            const card = toggle.closest('.card');
+            if (wishList.contains(card)) {
+                readList.appendChild(card);
+            } else {
+                wishList.appendChild(card);
+            }
+        })
     })
 }
 
 const form = document.getElementById('form');
+const library = new Library();
 
 form.addEventListener('submit', (event) => {
     event.preventDefault();
-    // build up the card and content elements
-    let card = document.createElement('div');
-    card.classList.add('card')
-    let img = document.createElement('img');
-    img.classList.add('book-image')
-    let info = document.createElement('div');
-    info.classList.add('info');
-    let options = document.createElement('div');
-    let toggle = document.createElement('button');
-    toggle.textContent = 'Toggle Read';
-    toggle.classList.add('toggle');
-    options.appendChild(toggle);
-    options.classList.add('options');
-
     // retrieve input information
     const title = document.getElementById('title');
     const author = document.getElementById('author');
     const cover = document.getElementById('cover');
     const read = document.getElementById('yes');
     const haveRead = read.checked ? true : false;
+    let newBook;
     // make the new book object and add it to the global array library
-    const newBook = new Book(title.value, author.value, haveRead);
-    library.push(newBook);
-    
-    let titleChild = document.createElement('p')
-    let authorChild = document.createElement('p')
-    titleChild.textContent = title.value;
-    authorChild.textContent = author.value;
-    info.appendChild(titleChild);
-    info.appendChild(authorChild);
-
-    if (cover.files && cover.files[0]) { // Check if a file was actually selected
-        const file = cover.files[0];
-        const imageUrl = URL.createObjectURL(file); // Create a temporary URL for the file
-        img.src = imageUrl;
-        img.alt = title + ' Cover'; 
+    if (cover.files && cover.files[0]) {
+        newBook = new Book(title.value, author.value, URL.createObjectURL(cover.files[0]), haveRead);
     } else {
-        img.src = 'images/books.webp';
-        img.alt = 'No cover image available';
+        newBook = new Book(title.value, author.value, 'images/books.webp', haveRead);
     }
-
-    card.appendChild(img);
-    card.appendChild(info);
-
-    if (haveRead) {
-        const haveRead = document.getElementById('read-cards');
-        haveRead.appendChild(card);
-    } else {
-        const wantToRead = document.getElementById('want-cards');
-        wantToRead.appendChild(card);
-    }
-
-    const trash = document.createElement('img');
-    trash.classList.add('trash');
-    trash.src = 'images/trash.jpg';
-    trash.alt = 'Trash Can';
-    trash.addEventListener('click', function() {
-        const card = this.closest('.card');
-        card.remove();
-    });
-    options.appendChild(trash);
-    card.append(options);
-
-    const wishList = document.getElementById('want-cards');
-    const readList = document.getElementById('read-cards');
-    toggle.addEventListener('click', () => {
-        const card = toggle.closest('.card');
-        if (wishList.contains(card)) {
-            readList.appendChild(card);
-        } else {
-            wishList.appendChild(card);
-        }
-    })
+    library.addBookToLibrary(newBook);
+    screenRenderer();
 })
 
-const trash = document.querySelectorAll('.trash');
-trash.forEach(can => {
-    can.addEventListener('click', function() {
-        const card = this.closest('.card');
-        card.remove();
-    })
-})
+let theRoad = new Book('The Road', 'Cormac McCarthy', 'images/The-road.jpg', false);
+let annaKarenina = new Book('Anna Karenina', 'Leo Tolstoy', 'images/anna-karenina-292.jpg', false);
+let grapesOfWrath = new Book('The Grapes of Wrath', 'John Steinbeck', 'images/grapes.jpg', true);
+let catsCradle = new Book(`Cat's Cradle`, 'Kurt Vonnegut', `images/Cat's_Cradle.jpg`, true);
+let bealeStreet = new Book('If Beale Street Could Talk', 'James Baldwin', 'images/IfBealeStreetCouldTalk.jpeg', true);
+library.library.push(...[theRoad, annaKarenina, grapesOfWrath, catsCradle, bealeStreet]);
+screenRenderer();
 
-const toggle = document.querySelectorAll('.toggle');
-const wish = document.getElementById('want-cards');
-const read = document.getElementById('read-cards');
-toggle.forEach(button => {
-    button.addEventListener('click', () => {
-        const card = button.closest('.card');
-        if (wish.contains(card)) {
-            read.appendChild(card);
-        } else {
-            wish.appendChild(card);
-        }
-    })
-})
+
+
 
 
 
